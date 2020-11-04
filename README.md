@@ -1,2 +1,2 @@
 # nmigo
-This repository is for learning purposes only.
+This repository is for learning purposes.

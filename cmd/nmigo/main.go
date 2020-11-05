@@ -9,6 +9,8 @@ import (
 )
 
 func main() {
+	fmt.Println("Nmigo!")
+
 	PrintMemUsage()
 
 	db, err := sql.Open("mysql", "root:asd@/staff")
@@ -107,39 +109,6 @@ func main() {
 	if err = rows.Err(); err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
 	}
-
-	///////////////////////////////////////////////////////////////
-	//db, err := sql.Open("mysql", "root:7370142533@/sample_staff")
-	//
-	//if err != nil {
-	//	panic(err.Error())  // Just for example purpose. You should use proper error handling instead of panic
-	//}
-	//
-	//defer db.Close()
-	//
-	//stmtOut, err := db.Prepare("SELECT id, employee_id FROM salary WHERE id = ?")
-	//
-	//if err != nil {
-	//	panic(err.Error()) // proper error handling instead of panic in your app
-	//}
-	//
-	//defer stmtOut.Close()
-	//
-	//var id int // we "scan" the result in here
-	//var employeeId int
-	//
-	//if err = stmtOut.QueryRow(13).Scan(&id, &employeeId); err != nil {
-	//	panic(err.Error()) // proper error handling instead of panic in your app
-	//}
-	//
-	//fmt.Printf("id: %d employee_id: %d", id, employeeId)
-	//fmt.Println()
-	//
-	//if err = stmtOut.QueryRow(1).Scan(&id, &employeeId); err != nil {
-	//	panic(err.Error()) // proper error handling instead of panic in your app
-	//}
-	//
-	//fmt.Printf("id: %d employee_id: %d", id, employeeId)
 }
 
 // PrintMemUsage outputs the current, total and OS memory being used. As well as the number

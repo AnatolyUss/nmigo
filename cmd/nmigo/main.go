@@ -1,19 +1,35 @@
 package main
 
 import (
-	"runtime"
-	//"time"
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"os"
+	"path/filepath"
+	"runtime"
+	"time"
+	"../../internal/boot_processor"
 )
 
 func main() {
-	fmt.Println("Nmigo!")
+	fmt.Println(bootprocessor.GetIntroductionMessage())
+	baseDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	//
+
+
+
 
 	PrintMemUsage()
 
-	db, err := sql.Open("mysql", "root:asd@/staff")
+	start := time.Now()
+
+	db, err := sql.Open("mysql", "root:7370142533@/sample_staff")
 
 	if err != nil {
 		panic(err.Error())  // Just for example purpose. You should use proper error handling instead of panic
@@ -109,6 +125,9 @@ func main() {
 	if err = rows.Err(); err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
 	}
+
+	elapsed := time.Since(start)
+	fmt.Printf("Time taken %s", elapsed)
 }
 
 // PrintMemUsage outputs the current, total and OS memory being used. As well as the number

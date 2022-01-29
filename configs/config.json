@@ -11,13 +11,12 @@
         "Notice, any parameter, acceptable by the node mysql module can be placed here."
     ],
     "source" : {
-        "host"             : "localhost",
-        "port"             : 3306,
-        "database"         : "test_db",
-        "charset"          : "utf8mb4",
-        "supportBigNumbers": true,
-        "user"             : "root",
-        "password"         : "0123456789"
+        "host"     : "localhost",
+        "port"     : 3306,
+        "database" : "test_db",
+        "charset"  : "utf8mb4",
+        "user"     : "root",
+        "password" : "0123456789"
     },
 
     "target_description" : [
@@ -84,5 +83,5 @@
         "In order to enable the additional configuration options, placed at extra_config.json",
         " - set this parameter true."
     ],
-    "enable_extra_config" : true
+    "enable_extra_config" : false
 }

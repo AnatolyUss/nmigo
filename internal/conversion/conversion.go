@@ -63,12 +63,12 @@ type DbConfig struct {
 
 func InitializeConversion() *Conversion {
 	baseDir := getBaseDirectory()
-	fileName := filepath.Join(baseDir, "configs", "config.json")
+	fileName := filepath.Join(baseDir, "config", "config.json")
 	contents := fs_ops.ReadWholeFile(fileName)
 	conversion := parseConfig(contents)
 
 	if conversion.EnableExtraConfig {
-		fileName = filepath.Join(baseDir, "configs", "extra_config.json")
+		fileName = filepath.Join(baseDir, "config", "extra_config.json")
 		contents = fs_ops.ReadWholeFile(fileName)
 		conversion.ExtraConfig = parseExtraConfig(contents)
 	}

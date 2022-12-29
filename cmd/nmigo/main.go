@@ -11,12 +11,14 @@ import (
 	"fmt"
 	"nmigo/internal/boot_processor"
 	"nmigo/internal/conversion"
+	"nmigo/internal/fs_ops"
 )
 
 func main() {
 	fmt.Println(boot_processor.GetIntroductionMessage())
-	initializedConversion := conversion.InitializeConversion()
-	fmt.Println(initializedConversion)
+	baseDir := fs_ops.GetBaseDirectory()
+	initializedConversion := conversion.InitializeConversion(baseDir)
+	fs_ops.CreateLogsDirectory(initializedConversion.LogsDirPath)
 }
 
 //func main() {

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"nmigo/internal/fs_ops"
-	"os"
 	"path/filepath"
 )
 
@@ -19,7 +18,10 @@ type Conversion struct {
 	MigrateOnlyData             bool
 	Delimiter                   string
 	EnableExtraConfig           bool
-	ExtraConfig                 *ExtraConfig // Note, ExtraConfig is type.
+	ExtraConfig                 *ExtraConfig // Note, ExtraConfig is nilable type.
+	LogsDirPath                 string
+	DataTypesMapAddr            string
+	IndexTypesMapAddr           string
 }
 
 type ExtraConfig struct {
@@ -61,11 +63,13 @@ type DbConfig struct {
 	Password string
 }
 
-func InitializeConversion() *Conversion {
-	baseDir := getBaseDirectory()
+func InitializeConversion(baseDir string) *Conversion {
 	fileName := filepath.Join(baseDir, "config", "config.json")
 	contents := fs_ops.ReadWholeFile(fileName)
 	conversion := parseConfig(contents)
+	conversion.LogsDirPath = filepath.Join(baseDir, "logs_directory")
+	conversion.DataTypesMapAddr = filepath.Join(baseDir, "config", "data_types_map.json")
+	conversion.IndexTypesMapAddr = filepath.Join(baseDir, "config", "index_types_map.json")
 
 	if conversion.EnableExtraConfig {
 		fileName = filepath.Join(baseDir, "config", "extra_config.json")
@@ -74,22 +78,6 @@ func InitializeConversion() *Conversion {
 	}
 
 	return &conversion
-}
-
-func getBaseDirectory() string {
-	baseDir, ok := os.LookupEnv("aux_dir")
-
-	if !ok {
-		pwd, err := os.Getwd()
-
-		if err != nil {
-			panic(err)
-		}
-
-		baseDir = filepath.Join(pwd, "..", "..")
-	}
-
-	return baseDir
 }
 
 func parseConfig(configData []byte) Conversion {
@@ -104,47 +92,6 @@ func parseExtraConfig(configData []byte) *ExtraConfig {
 	return &extraConfig
 }
 
-func jsonMarshalSliceOfEmptyInterfaces(data []interface{}) (result []byte) {
-	for _, dataItem := range data {
-		result = append(result, jsonMarshalInterface(dataItem)...)
-	}
-
-	return result
-}
-
-func jsonMarshalInterface(data interface{}) []byte {
-	bytes, err := json.Marshal(data)
-
-	if err != nil {
-		fmt.Printf("Error %v", err)
-		panic(err)
-	}
-
-	return bytes
-}
-
-func jsonMarshal(data map[string]interface{}) []byte {
-	bytes, err := json.Marshal(data)
-
-	if err != nil {
-		fmt.Printf("Error %v", err)
-		panic(err)
-	}
-
-	return bytes
-}
-
-func jsonMarshalMapStringString(data map[string]string) []byte {
-	bytes, err := json.Marshal(data)
-
-	if err != nil {
-		fmt.Printf("Error %v", err)
-		panic(err)
-	}
-
-	return bytes
-}
-
 func jsonUnmarshal(data []byte, valueContainer interface{}) {
 	err := json.Unmarshal(data, &valueContainer)
 
@@ -152,14 +99,4 @@ func jsonUnmarshal(data []byte, valueContainer interface{}) {
 		fmt.Printf("Error %v", err)
 		panic(err)
 	}
-}
-
-func convertSliceOfInterfacesToSliceOfStrings(configValue interface{}) []string {
-	var excludeTablesSlice []string
-
-	for _, tableToExclude := range configValue.([]interface{}) {
-		excludeTablesSlice = append(excludeTablesSlice, fmt.Sprint(tableToExclude))
-	}
-
-	return excludeTablesSlice
 }

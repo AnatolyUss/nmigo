@@ -65,45 +65,45 @@
         "If you don't need to create foreign keys 'on the fly', then remove the 'foreign_keys' section."
     ],
 
-    "foreign_keys" : [
+    "foreignKeys" : [
         {
-            "constraint_name" : "renamed_admins_renamed_group_id_foreign",
-            "table_name" : "renamed_admins",
-            "column_name" : "renamed_group_id",
-            "referenced_table_name" : "renamed_groups",
-            "referenced_column_name" : "renamed_id",
-            "update_rule" : "restrict",
-            "delete_rule" : "restrict"
+            "constraintName" : "renamed_admins_renamed_group_id_foreign",
+            "tableName" : "renamed_admins",
+            "columnName" : "renamed_group_id",
+            "referencedTableName" : "renamed_groups",
+            "referencedColumnName" : "renamed_id",
+            "updateRule" : "restrict",
+            "deleteRule" : "restrict"
         },
 
         {
-            "constraint_name" : "logs_test_3_merchant_id_foreign",
-            "table_name" : "logs_test_3",
-            "column_name" : "merchant_id",
-            "referenced_table_name" : "merchants",
-            "referenced_column_name" : "id",
-            "update_rule" : "restrict",
-            "delete_rule" : "cascade"
+            "constraintName" : "logs_test_3_merchant_id_foreign",
+            "tableName" : "logs_test_3",
+            "columnName" : "merchant_id",
+            "referencedTableName" : "merchants",
+            "referencedColumnName" : "id",
+            "updateRule" : "restrict",
+            "deleteRule" : "cascade"
         },
 
         {
-            "constraint_name" : "composite_foreign_key_example",
-            "table_name" : "logs_test-6",
-            "column_name" : "id1",
-            "referenced_table_name" : "logs_test_4",
-            "referenced_column_name" : "id1",
-            "update_rule" : "cascade",
-            "delete_rule" : "cascade"
+            "constraintName" : "composite_foreign_key_example",
+            "tableName" : "logs_test-6",
+            "columnName" : "id1",
+            "referencedTableName" : "logs_test_4",
+            "referencedColumnName" : "id1",
+            "updateRule" : "cascade",
+            "deleteRule" : "cascade"
         },
 
         {
-            "constraint_name" : "composite_foreign_key_example",
-            "table_name" : "logs_test-6",
-            "column_name" : "id2",
-            "referenced_table_name" : "logs_test_4",
-            "referenced_column_name" : "id2",
-            "update_rule" : "cascade",
-            "delete_rule" : "cascade"
+            "constraintName" : "composite_foreign_key_example",
+            "tableName" : "logs_test-6",
+            "columnName" : "id2",
+            "referencedTableName" : "logs_test_4",
+            "referencedColumnName" : "id2",
+            "updateRule" : "cascade",
+            "deleteRule" : "cascade"
         }
     ]
 }

@@ -19,7 +19,7 @@ type Conversion struct {
 	MigrateOnlyData             bool
 	Delimiter                   string
 	EnableExtraConfig           bool
-	ExtraConfig                 ExtraConfig
+	ExtraConfig                 *ExtraConfig // Note, ExtraConfig is type.
 }
 
 type ExtraConfig struct {
@@ -77,73 +77,31 @@ func InitializeConversion() *Conversion {
 }
 
 func getBaseDirectory() string {
-	baseDir, auxDirIsSet := os.LookupEnv("aux_dir")
+	baseDir, ok := os.LookupEnv("aux_dir")
 
-	if !auxDirIsSet {
+	if !ok {
 		pwd, err := os.Getwd()
 
 		if err != nil {
 			panic(err)
 		}
 
-		baseDir = pwd
+		baseDir = filepath.Join(pwd, "..", "..")
 	}
 
 	return baseDir
 }
 
 func parseConfig(configData []byte) Conversion {
-	var config map[string]interface{}
-	jsonUnmarshal(configData, &config)
-
-	var source DbConfig
-	bytesSliceSource := jsonMarshal(config["source"].(map[string]interface{}))
-	jsonUnmarshal(bytesSliceSource, &source)
-
-	var target DbConfig
-	bytesSliceTarget := jsonMarshal(config["target"].(map[string]interface{}))
-	jsonUnmarshal(bytesSliceTarget, &target)
-
-	maxEachDbConnectionPoolSize := int(config["max_each_db_connection_pool_size"].(float64))
-	encoding := config["encoding"].(string)
-	schema := config["schema"].(string)
-	excludeTables := convertSliceOfInterfacesToSliceOfStrings(config["exclude_tables"])
-	includeTables := convertSliceOfInterfacesToSliceOfStrings(config["include_tables"])
-	migrateOnlyData := config["migrate_only_data"].(bool)
-	delimiter := config["delimiter"].(string)
-	enableExtraConfig := config["enable_extra_config"].(bool)
-
-	return Conversion{
-		Source:                      source,
-		Target:                      target,
-		MaxEachDbConnectionPoolSize: maxEachDbConnectionPoolSize,
-		Encoding:                    encoding,
-		Schema:                      schema,
-		ExcludeTables:               excludeTables,
-		IncludeTables:               includeTables,
-		MigrateOnlyData:             migrateOnlyData,
-		Delimiter:                   delimiter,
-		EnableExtraConfig:           enableExtraConfig,
-	}
+	var conversion Conversion
+	jsonUnmarshal(configData, &conversion)
+	return conversion
 }
 
-func parseExtraConfig(configData []byte) ExtraConfig {
-	var config map[string]interface{}
+func parseExtraConfig(configData []byte) *ExtraConfig {
 	var extraConfig ExtraConfig
-	//var extraConfigTables []ExtraConfigTable
-	var extraConfigForeignKeys []ExtraConfigForeignKey
-	//var extraConfigTableName ExtraConfigTableName
-	//var extraConfigTableColumns []ExtraConfigTableColumn
-
-	jsonUnmarshal(configData, &config)
-
-	// var xx []map[string]string
-	x := config["foreign_keys"].([]interface{})
-	fmt.Println(x)
-	bytesForeignKeys := jsonMarshalSliceOfEmptyInterfaces(x)
-	jsonUnmarshal(bytesForeignKeys, &extraConfigForeignKeys)
-
-	return extraConfig
+	jsonUnmarshal(configData, &extraConfig)
+	return &extraConfig
 }
 
 func jsonMarshalSliceOfEmptyInterfaces(data []interface{}) (result []byte) {
